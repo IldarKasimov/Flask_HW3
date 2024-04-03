@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ super() }} - {{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <form method="post">
+        <input type="number" name="year_public" placeholder="Год издания">
+        <input type="submit" value="Поиск по странице">
+    </form>
+</div>
+<div class="row">
+{% if books %}
+    {% for book in books %}
+        <p class="col-12 col-md-6"> {{ book }}<br>
+        </p>
+    {% endfor %}
+{% else %}
+    <p class="col-12 col-md-12"> Книги с {{ year_public }} годом издания на странице не найдены.<br>
+    </p>
+{% endif %}
+</div>
+{% endblock %}
