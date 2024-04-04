@@ -18,6 +18,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
 db.init_app(app)
 
 
+def get_book_century(books: list, year_public: str) -> list:
+    books_century = []
+    for book in books:
+        if book.year_public == int(year_public):
+            books_century.append(book)
+    return books_century
+
+
 @app.cli.command('init-db')
 def init_db():
     db.create_all()
@@ -31,7 +39,7 @@ def fill_tables():
         db.session.add(new_author)
     db.session.commit()
 
-    for i in range(25):
+    for i in range(36):
         new_book = Book(name=f'Книга_{i + 1}',
                         year_public=randint(1984, 2024),
                         quantity_copy=randint(1, 10),
@@ -69,11 +77,7 @@ def get_xx():
     context = {'books': books}
     if request.method == 'POST':
         if year_public := request.form.get('year_public'):
-            books_century = []
-            for book in books:
-                if book.year_public == int(year_public):
-                    books_century.append(book)
-            books = books_century
+            books = get_book_century(books, year_public)
             context = {'books': books,
                        'year_public': year_public}
             return render_template('books.html', **context)
@@ -91,11 +95,7 @@ def get_xxi():
     context = {'books': books}
     if request.method == 'POST':
         if year_public := request.form.get('year_public'):
-            books_century = []
-            for book in books:
-                if book.year_public == int(year_public):
-                    books_century.append(book)
-            books = books_century
+            books = get_book_century(books, year_public)
             context = {'books': books,
                        'year_public': year_public}
             return render_template('books.html', **context)
